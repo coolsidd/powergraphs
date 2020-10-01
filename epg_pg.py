@@ -3,6 +3,7 @@
 # from sage.all import *
 import networkx as nx
 from collections import Counter
+from copy import deepcopy
 from pprint import pprint
 import math
 from importlib import reload
