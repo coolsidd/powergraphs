@@ -83,6 +83,8 @@ def PG_monoid_details(
     G = nx.Graph()
     G.add_nodes_from(eles)
     order_dict = dict()
+    out_order_dict = dict()
+    inv_order_dict = dict()
     layout = nx.kamada_kawai_layout(plot_monoid(index, period, draw=False))
     for element in eles:
         if element == eles[0] and ignore_one:
@@ -96,12 +98,91 @@ def PG_monoid_details(
             next_node += element
             if next_node > index:
                 next_node = index + (next_node - index) % period
-        print(element, ": ", adj_nodes)
+        # print(element, ": ", adj_nodes)
         if element >= index:
             order_dict[len(adj_nodes)] = order_dict.get(len(adj_nodes), set()).union(
                 {element}
             )
-    print(order_dict)
+            inv_order_dict[element] = len(adj_nodes)
+    print("Elements with index 1 of order y")
+    print("Order : Elements")
+    for x, y in order_dict.items():
+        print("{:<6}: {}".format(x, y))
+    for element in range(1, index):
+        temp = index + (element - index) % period
+        out_order_dict[inv_order_dict[temp]] = out_order_dict.get(
+            inv_order_dict[temp], set()
+        ).union({element})
+        inv_order_dict[element] = inv_order_dict[temp]
+    print("\nElements with index >1 of order y")
+    print("Order : Elements")
+    for x, y in out_order_dict.items():
+        print("{:<6}: {}".format(x, y))
+
+    # stores the possible orders - Eg 12 - [1, 2, 3, 4, 6, 12]
+    possible_orders = sorted([x for x in order_dict.keys()])
+    # will store finally all possible corresponding to that order such that o(x)|o(y)
+    # eg for 6 if period is 12 - [1-2-6, 1-3-6]
+    # eg for 12 if period is 12 - [1-2-4-12, 1-3-6-12, 1-2-6-12]
+    possible_chains = {x: [] for x in possible_orders}
+    for i in range(len(possible_orders)):
+        if possible_orders[i] == 1:
+            possible_chains[1].append([1])
+            continue
+        checked = set()
+        for j in range(i - 1, -1, -1):
+            if (possible_orders[i] % possible_orders[j]) == 0:
+                for k in checked:
+                    if k % possible_orders[j] == 0:
+                        break
+                else:
+                    checked.add(possible_orders[j])
+                    possible_chains[possible_orders[i]].extend(
+                        deepcopy(possible_chains[possible_orders[j]])
+                    )
+
+        for x in possible_chains[possible_orders[i]]:
+            x.append(possible_orders[i])
+
+    print("\nMaximal Chains")
+    print(possible_chains[possible_orders[-1]])
+    print("\nMaximal cliques in periodic part (isomorphic to Z_n)")
+    print("Chain : Clique : Size")
+    for x in possible_chains[possible_orders[-1]]:
+        temp = set()
+        for y in x:
+            temp = temp.union(order_dict[y])
+        print("{}: {}: {}".format(x, temp, len(temp)))
+        # TODO Draw graph here
+    print("\nCliques overall")
+    print("Chain : Clique : Size")
+    done = set()
+    clique_no = -1
+    clique = None
+    clique_chain = None
+    for x in possible_chains[possible_orders[-1]]:
+        for z in range(len(x)):
+            tempx = x[z:]
+            myhash = "".join([str(x) for x in tempx])
+            if myhash in done:
+                break
+            done.add(myhash)
+            temp = set()
+            temp = temp.union(out_order_dict.get(tempx[0], set()))
+            for y in tempx:
+                temp = temp.union(order_dict[y])
+            print("{}: {}: {}".format(tempx, temp, len(temp)))
+            if len(temp) > clique_no:
+                clique_no = len(temp)
+                clique = temp
+                clique_chain = tempx
+            # TODO Draw graph here
+    print("Clique no : {}".format(clique_no))
+    print("Clique : {}".format(clique))
+    print("Clique chain : {}".format(clique_chain))
+    # TODO Draw graph here
+    # print(out_order_dict)
+    # print(inv_order_dict)
     plt.figure()
     nx.draw(G, layout, with_labels=True, node_size=200)
     plt.show()
