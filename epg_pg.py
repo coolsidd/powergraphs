@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from sage.all import *
+# from sage.all import *
 import networkx as nx
 from collections import Counter
 from pprint import pprint
@@ -10,56 +10,56 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm, trange
 
 
-def get_epg(g: groups, group_type=PermutationGroup) -> nx.Graph:
-    ele = [k for k in g]
-    G = nx.Graph()
-    G.add_nodes_from(ele)
-    for i in range(len(ele)):
-        for j in trange(i + 1, len(ele)):
-            temp = g.subgroup([ele[i], ele[j]])
-            if temp.is_cyclic():
-                G.add_edge(ele[i], ele[j])
-    return G
+# def get_epg(g: groups, group_type=PermutationGroup) -> nx.Graph:
+#     ele = [k for k in g]
+#     G = nx.Graph()
+#     G.add_nodes_from(ele)
+#     for i in range(len(ele)):
+#         for j in trange(i + 1, len(ele)):
+#             temp = g.subgroup([ele[i], ele[j]])
+#             if temp.is_cyclic():
+#                 G.add_edge(ele[i], ele[j])
+#     return G
 
 
-def isPower(element1, element2, identity) -> bool:
-    e1 = element1
-    e2 = element2
-    if e1 == e2:
-        return True
-    while e1 != identity:
-        e1 = e1 * element1
-        if e1 == element2:
-            return True
-    while e2 != identity:
-        e2 = e2 * element2
-        if e2 == element1:
-            return True
-    return False
+# def isPower(element1, element2, identity) -> bool:
+#     e1 = element1
+#     e2 = element2
+#     if e1 == e2:
+#         return True
+#     while e1 != identity:
+#         e1 = e1 * element1
+#         if e1 == element2:
+#             return True
+#     while e2 != identity:
+#         e2 = e2 * element2
+#         if e2 == element1:
+#             return True
+#     return False
 
 
-def get_pg(g: groups, group_type=PermutationGroup) -> nx.Graph:
-    ele = [k for k in g]
-    G = nx.DiGraph()
-    G.add_nodes_from(ele)
-    for i in range(len(ele)):
-        temp = ele[i]
-        while temp != ele[0]:
-            temp = temp * ele[i]
-            G.add_edge(ele[i], temp)
-        # for j in trange(i + 1, len(ele)):
-        #     if isPower(ele[i], ele[j], ele[0]):
-        #         G.add_edge(ele[i], ele[j])
-    return G
+# def get_pg(g: groups, group_type=PermutationGroup) -> nx.Graph:
+#     ele = [k for k in g]
+#     G = nx.DiGraph()
+#     G.add_nodes_from(ele)
+#     for i in range(len(ele)):
+#         temp = ele[i]
+#         while temp != ele[0]:
+#             temp = temp * ele[i]
+#             G.add_edge(ele[i], temp)
+#         # for j in trange(i + 1, len(ele)):
+#         #     if isPower(ele[i], ele[j], ele[0]):
+#         #         G.add_edge(ele[i], ele[j])
+#     return G
 
 
-def get_components(graph: nx.Graph) -> list:
-    pass
+# def get_components(graph: nx.Graph) -> list:
+#     pass
 
 
-def is_clique(graph: nx.Graph) -> bool:
-    num_nodes = len(graph.nodes)
-    return len(graph.edges) == num_nodes * (num_nodes - 1) / 2
+# def is_clique(graph: nx.Graph) -> bool:
+#     num_nodes = len(graph.nodes)
+#     return len(graph.edges) == num_nodes * (num_nodes - 1) / 2
 
 
 def plot_monoid(index, period, draw=True):
@@ -194,42 +194,42 @@ def PG_monoid_details(
     plt.show()
 
 
-def PG_group_details(g: groups, *args, **kwargs):
-    PG = get_pg(g)
-    nx.draw(PG, with_labels=True, **kwargs)
-    plt.show()
+# def PG_group_details(g: groups, *args, **kwargs):
+#     PG = get_pg(g)
+#     nx.draw(PG, with_labels=True, **kwargs)
+#     plt.show()
 
 
-def main():
-    G_1 = KleinFourGroup()
-    EPG_1 = get_epg(G_1)
-    G_2 = CyclicPermutationGroup(5)
-    EPG_2 = get_epg(G_2)
-    # nx.draw(EPG_1, with_labels=True, node_size=500)
-    # plt.savefig("Graph.png", format="PNG", dpi=300)
-    nx.draw(EPG_2, with_labels=True, node_size=500)
-    plt.savefig("Graph2.png", format="PNG", dpi=300)
-    # for n in range(4, 5):
-    #     # n = 2 ** n
-    #     G = sg.SymmetricGroup(n)
-    #     PG = get_pg(G)
-    #     # EPG = get_epg(G)
-    #     eles = [x for x in G]
-    #     nx.draw(PG.to_undirected(), with_labels=True, node_size=500)
-    #     plt.savefig("Graph.png", format="PNG", dpi=300)
-    #     # PG.remove_node(eles[0])
-    #     # EPG.remove_node(eles[0])
-    #     # components_EPG = list(nx.connected_components(EPG))
-    #     # components_PG = list(nx.connected_components(PG.to_undirected()))
-    #     # nx.write_gpickle(PG, "./S_{}_EPG_Directed.gpickle".format(n))
-    #     # pprint(Counter([len(x) for x in components]))
-    #     # print("|Components| {}| ".format(Counter([len(x) for x in components_EPG])))
-    #     # try:
-    #     #     print("|Diameter|  {} |".format(nx.diameter(PG.to_undirected())))
-    #     # except:
-    #     #     print("Not Connected")
-    #     # print("| {} | {}|".format(nx.diameter(PG), nx.diameter(EPG)))
+# def main():
+#     G_1 = KleinFourGroup()
+#     EPG_1 = get_epg(G_1)
+#     G_2 = CyclicPermutationGroup(5)
+#     EPG_2 = get_epg(G_2)
+#     # nx.draw(EPG_1, with_labels=True, node_size=500)
+#     # plt.savefig("Graph.png", format="PNG", dpi=300)
+#     nx.draw(EPG_2, with_labels=True, node_size=500)
+#     plt.savefig("Graph2.png", format="PNG", dpi=300)
+#     # for n in range(4, 5):
+#     #     # n = 2 ** n
+#     #     G = sg.SymmetricGroup(n)
+#     #     PG = get_pg(G)
+#     #     # EPG = get_epg(G)
+#     #     eles = [x for x in G]
+#     #     nx.draw(PG.to_undirected(), with_labels=True, node_size=500)
+#     #     plt.savefig("Graph.png", format="PNG", dpi=300)
+#     #     # PG.remove_node(eles[0])
+#     #     # EPG.remove_node(eles[0])
+#     #     # components_EPG = list(nx.connected_components(EPG))
+#     #     # components_PG = list(nx.connected_components(PG.to_undirected()))
+#     #     # nx.write_gpickle(PG, "./S_{}_EPG_Directed.gpickle".format(n))
+#     #     # pprint(Counter([len(x) for x in components]))
+#     #     # print("|Components| {}| ".format(Counter([len(x) for x in components_EPG])))
+#     #     # try:
+#     #     #     print("|Diameter|  {} |".format(nx.diameter(PG.to_undirected())))
+#     #     # except:
+#     #     #     print("Not Connected")
+#     #     # print("| {} | {}|".format(nx.diameter(PG), nx.diameter(EPG)))
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
