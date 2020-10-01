@@ -1,0 +1,3 @@
+#+TITLE: Readme
+
+Code for generating power graphs of monogenic semigroups
