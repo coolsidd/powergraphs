@@ -1,3 +1,4 @@
 #+TITLE: Readme
 
 Code for generating power graphs of monogenic semigroups
+[[https://mybinder.org/v2/gh/coolsidd/powergraphs/master?filepath=interactive.ipynb][Binder_link]]
