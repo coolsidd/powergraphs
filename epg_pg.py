@@ -140,7 +140,6 @@ def PG_monoid_details(
                     possible_chains[possible_orders[i]].extend(
                         deepcopy(possible_chains[possible_orders[j]])
                     )
-
         for x in possible_chains[possible_orders[i]]:
             x.append(possible_orders[i])
 
@@ -153,7 +152,9 @@ def PG_monoid_details(
         for y in x:
             temp = temp.union(order_dict[y])
         print("{}: {}: {}".format(x, temp, len(temp)))
-        # TODO Draw graph here
+        if draw_all_cliques:
+            plt.figure()
+            nx.draw(G.subgraph(temp), pos=layout, with_labels=True, node_size=200)
     print("\nCliques overall")
     print("Chain : Clique : Size")
     done = set()
@@ -161,14 +162,14 @@ def PG_monoid_details(
     clique = None
     clique_chain = None
     for x in possible_chains[possible_orders[-1]]:
-        for z in range(len(x)):
-            tempx = x[z:]
+        for z in range(1, len(x) + 1):
+            tempx = x[0:z]
             myhash = "".join([str(x) for x in tempx])
             if myhash in done:
                 break
             done.add(myhash)
             temp = set()
-            temp = temp.union(out_order_dict.get(tempx[0], set()))
+            temp = temp.union(out_order_dict.get(tempx[-1], set()))
             for y in tempx:
                 temp = temp.union(order_dict[y])
             print("{}: {}: {}".format(tempx, temp, len(temp)))
@@ -176,11 +177,16 @@ def PG_monoid_details(
                 clique_no = len(temp)
                 clique = temp
                 clique_chain = tempx
-            # TODO Draw graph here
+            if draw_all_cliques:
+                plt.figure()
+                nx.draw(G.subgraph(temp), pos=layout, with_labels=True, node_size=200)
     print("Clique no : {}".format(clique_no))
     print("Clique : {}".format(clique))
     print("Clique chain : {}".format(clique_chain))
     # TODO Draw graph here
+    if draw_clique or draw_all_cliques:
+        plt.figure()
+        nx.draw(G.subgraph(clique), pos=layout, with_labels=True, node_size=200)
     # print(out_order_dict)
     # print(inv_order_dict)
     plt.figure()
