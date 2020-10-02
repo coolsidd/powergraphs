@@ -163,7 +163,7 @@ def PG_monoid_details(
     clique = None
     clique_chain = None
     for x in possible_chains[possible_orders[-1]]:
-        for z in range(1, len(x) + 1):
+        for z in range(len(x), 0, -1):
             tempx = x[0:z]
             myhash = "".join([str(x) for x in tempx])
             if myhash in done:
